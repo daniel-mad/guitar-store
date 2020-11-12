@@ -1,0 +1,66 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;   
+    
+}
+img{
+max-width: 100% ;
+max-height: 100%;
+}
+h6{
+    font-size: 12px;
+}
+section{
+   background-color: aliceblue;
+}
+
+/* Navbar */
+.navbar{
+    padding: 5px 0;
+    
+}
+.nav-item{
+    padding: 0 18px;
+}
+
+.logo-img{
+    width: 25px !important;
+    
+}
+.cart{
+    position: relative;
+    
+}
+#cart-item{
+    visibility: hidden;
+    position: absolute;
+    top:0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 100%;
+    background-color: #f8f9fa;
+    text-align: center;
+    font-size: 12px;
+
+}
+.fa-shopping-cart{
+    margin-top: 16px;
+}
+/* Cards */
+
+
+.img-wrapper{
+    margin: 25% 25%;
+    width: 40%;
+    padding-bottom: 20px;
+}
+.btn{
+    font-size: 10px;
+}
+.price{
+    color:red;
+    font-weight: bold;
+}
+
