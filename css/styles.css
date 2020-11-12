@@ -52,8 +52,9 @@ section{
 
 
 .img-wrapper{
+    height: 25vh;
     margin: 25% 25%;
-    width: 40%;
+    width: 5vw;
     padding-bottom: 20px;
 }
 .btn{

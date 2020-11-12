@@ -37,6 +37,7 @@ class GuitarElement {
       </div>
         <div class="card-body">
           <h6 class="card-title text-center">${this.guitar.description}</h6>
+          <hr class="mb-3">
           <p>Color: ${this.guitar.color}</p>
           <p><span class="price">${this.guitar.price} $ </span><del>${(this.guitar.price * 1.3).toFixed(2)} $</del></p>
           <hr class="mb-3">
