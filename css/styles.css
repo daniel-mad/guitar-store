@@ -48,6 +48,12 @@ section{
 .fa-shopping-cart{
     margin-top: 16px;
 }
+.btn-group{
+    margin-right: 10% !important;
+}
+.form-control-file{
+width: auto !important;
+}
 /* Cards */
 
 

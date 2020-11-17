@@ -130,17 +130,20 @@ class ShoppingCart {
 
 //Shopping Cart Element
 class ShoppingCartElement{
-    constructor(shoppingCart){
+    constructor(shoppingCart, guitarList){
         this.shoppingCart = shoppingCart;
+        this.guitarList = guitarList;
     }
     sellGuitars(){
         App.sellGuitars(this.shoppingCart);
     }
+
     renderCart() {
         let itemNo = 1;
         const cartTable = document.createElement("table");
         cartTable.className = "table table-hover";
         cartTable.innerHTML += `
+        <caption>Total items in the store: ${this.guitarList.guitars.length}</caption>
         <thead>
             <tr>
              <th scope="col">#</th>
@@ -192,7 +195,7 @@ class GuitarShop {
         const appHook = document.getElementById('app');
         this.shoppingCart = new ShoppingCart();
         this.guitarList = new GuitarList();
-        this.ShoppingCartElement = new ShoppingCartElement(this.shoppingCart);
+        this.ShoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList );
         this.GuitarListElement = new GuitarListElement(this.guitarList);
         appHook.append(this.ShoppingCartElement.renderCart());
         appHook.append(this.GuitarListElement.renderGuitarList());
@@ -210,40 +213,59 @@ class App {
         this.shoppingCart = shop.shoppingCart;
         this.guitarList = shop.guitarList;
     }
+    
    
     static addGuitarToCart(guitar){
         if(document.querySelector("table") != null){
         this.shoppingCart.addGuitarToTheCart(guitar);
-        const shoppingCartElement = new ShoppingCartElement(this.shoppingCart );
+        const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList  );
         const table = document.querySelector("table");
         table.remove();
         appHook.insertBefore(shoppingCartElement.renderCart(),appHook.childNodes[0]);
         }else{
         this.shoppingCart.addGuitarToTheCart(guitar);
-        const shoppingCartElement = new ShoppingCartElement(this.shoppingCart );
+        const shoppingCartElement = new ShoppingCartElement(this.shoppingCart ,this.guitarList );
         appHook.insertBefore(shoppingCartElement.renderCart(),appHook.childNodes[0]);
 
         }
         
     }
     static sellGuitars(shoppingCart){
-        if(this.guitarList.guitars.length -  shoppingCart.cart.length < 10){
+        if(this.guitarList.guitars.length -  shoppingCart.cart.length < 5){
             alert("Cannot sell, store out of stock!")
-        }else{
+        }else if(shoppingCart.cart.length > 0){
             for(const guitar of shoppingCart.cart){
-                this.guitarList.sellGuitar(guitar);
-                console.log(this.guitarList.guitars.length);
+                this.guitarList.sellGuitar(guitar);   
             }
+            console.log(this.guitarList.guitars);
             this.shoppingCart.cart = [];
             alert("Thank you for shopping in this store, Yours guitar will be arrived soon :)");
             const table = document.querySelector("table");
             table.remove();
+            const shoppingCartElement = new ShoppingCartElement(this.shoppingCart ,this.guitarList );
+            appHook.insertBefore(shoppingCartElement.renderCart(),appHook.childNodes[0]);
             
-
+        }else{
+            alert("Please add an item to the cart!");
         }
+    }
+    static addGuitar(){
+        
+        const form = document.getElementById("add-guitar-form");
+        const type = document.getElementById("guitarType");
+        const color = document.getElementById("guitarColor");
+        const name = document.getElementById("guitarName");
+        const price = document.getElementById("guitarPrice");
+        const image = document.getElementById("guitarImage");
+        const guitar = new Guitar(type.value, color.value, name.value,price.value,"images/" +image.files[0].name);
+        form.reset();
+        
+
     }
 
 }
 
 App.init();
+const addGuitar = document.getElementById("addGuitar-btn");
+addGuitar.addEventListener("click",App.addGuitar);
 
