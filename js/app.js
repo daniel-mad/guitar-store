@@ -21,7 +21,7 @@ class GuitarElement {
     constructor(guitar) {
         this.guitar = guitar;
     }
-    addGuitarToCart(){
+    addGuitarToCart() {
         App.addGuitarToCart(this.guitar);
 
     }
@@ -45,7 +45,7 @@ class GuitarElement {
       </div>
         `;
         const addToCartBtn = guitarCard.querySelector(".btn-cart");
-        addToCartBtn.addEventListener("click",this.addGuitarToCart.bind(this));
+        addToCartBtn.addEventListener("click", this.addGuitarToCart.bind(this));
 
         return guitarCard;
     }
@@ -79,9 +79,9 @@ class GuitarList {
     ];
 
     // Class Methods
-   sellGuitar(guitar){
-       return this.guitars.pop(guitar);
-   }
+    sellGuitar(guitar) {
+        return this.guitars.pop(guitar);
+    }
 
     addGuitar(guitar) {
         return this.guitars.push(guitar);
@@ -93,8 +93,8 @@ class GuitarList {
 }
 
 // Guitar List Elemement Class
-class GuitarListElement{
-    constructor(guitarList){
+class GuitarListElement {
+    constructor(guitarList) {
         this.guitarList = guitarList;
     }
     renderGuitarList() {
@@ -115,26 +115,26 @@ class ShoppingCart {
 
     addGuitarToTheCart(guitar) {
         this.cart.push(guitar);
-        
+
     }
-    get totalPrice(){
+    get totalPrice() {
         const totalPrice = this.cart.reduce(
-            (previousValue, currentValue) =>{
+            (previousValue, currentValue) => {
                 return previousValue + currentValue.price;
-            },0
+            }, 0
         );
         return totalPrice;
     }
-  
+
 }
 
 //Shopping Cart Element
-class ShoppingCartElement{
-    constructor(shoppingCart, guitarList){
+class ShoppingCartElement {
+    constructor(shoppingCart, guitarList) {
         this.shoppingCart = shoppingCart;
         this.guitarList = guitarList;
     }
-    sellGuitars(){
+    sellGuitars() {
         App.sellGuitars(this.shoppingCart);
     }
 
@@ -154,7 +154,7 @@ class ShoppingCartElement{
         `;
         const tableBody = document.createElement("tbody");
         cartTable.append(tableBody);
-        for(const item of this.shoppingCart.cart){
+        for (const item of this.shoppingCart.cart) {
             const itemElement = document.createElement("tr");
             itemElement.innerHTML = `
             <th>${itemNo++}</th>
@@ -162,11 +162,11 @@ class ShoppingCartElement{
             <td>${item.price} $</td>
             `;
             tableBody.append(itemElement);
-            
+
         }
-        
-        cartTable.innerHTML+=   
-        `
+
+        cartTable.innerHTML +=
+            `
         
         <tfoot>
             <tr>
@@ -181,7 +181,7 @@ class ShoppingCartElement{
         </tfoot>    
         `;
         const checkoutBtn = cartTable.querySelector(".checkout-btn");
-        checkoutBtn.addEventListener("click",this.sellGuitars.bind(this));
+        checkoutBtn.addEventListener("click", this.sellGuitars.bind(this));
         return cartTable;
 
     }
@@ -195,7 +195,7 @@ class GuitarShop {
         const appHook = document.getElementById('app');
         this.shoppingCart = new ShoppingCart();
         this.guitarList = new GuitarList();
-        this.ShoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList );
+        this.ShoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
         this.GuitarListElement = new GuitarListElement(this.guitarList);
         appHook.append(this.ShoppingCartElement.renderCart());
         appHook.append(this.GuitarListElement.renderGuitarList());
@@ -207,49 +207,52 @@ class GuitarShop {
 //App Class
 
 class App {
+
+   
     static init() {
         const shop = new GuitarShop();
         shop.renderShop();
         this.shoppingCart = shop.shoppingCart;
         this.guitarList = shop.guitarList;
+        return this.guitarList;
     }
-    
-   
-    static addGuitarToCart(guitar){
-        if(document.querySelector("table") != null){
-        this.shoppingCart.addGuitarToTheCart(guitar);
-        const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList  );
-        const table = document.querySelector("table");
-        table.remove();
-        appHook.insertBefore(shoppingCartElement.renderCart(),appHook.childNodes[0]);
-        }else{
-        this.shoppingCart.addGuitarToTheCart(guitar);
-        const shoppingCartElement = new ShoppingCartElement(this.shoppingCart ,this.guitarList );
-        appHook.insertBefore(shoppingCartElement.renderCart(),appHook.childNodes[0]);
+
+
+    static addGuitarToCart(guitar) {
+        if (document.querySelector("table") != null) {
+            this.shoppingCart.addGuitarToTheCart(guitar);
+            const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
+            const table = document.querySelector("table");
+            table.remove();
+            appHook.insertBefore(shoppingCartElement.renderCart(), appHook.childNodes[0]);
+        } else {
+            this.shoppingCart.addGuitarToTheCart(guitar);
+            const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
+            appHook.insertBefore(shoppingCartElement.renderCart(), appHook.childNodes[0]);
 
         }
-        
+
     }
-    static sellGuitars(shoppingCart){
-        if(this.guitarList.guitars.length -  shoppingCart.cart.length < 5){
+    static sellGuitars(shoppingCart) {
+        if (this.guitarList.guitars.length - shoppingCart.cart.length < 5) {
             alert("Cannot sell, store out of stock!")
-        }else if(shoppingCart.cart.length > 0){
-            for(const guitar of shoppingCart.cart){
-                this.guitarList.sellGuitar(guitar);   
+        } else if (shoppingCart.cart.length > 0) {
+            for (const guitar of shoppingCart.cart) {
+                this.guitarList.sellGuitar(guitar);
             }
             console.log(this.guitarList.guitars);
             this.shoppingCart.cart = [];
             alert("Thank you for shopping in this store, Yours guitar will be arrived soon :)");
             const table = document.querySelector("table");
             table.remove();
-            const shoppingCartElement = new ShoppingCartElement(this.shoppingCart ,this.guitarList );
-            appHook.insertBefore(shoppingCartElement.renderCart(),appHook.childNodes[0]);
-            
-        }else{
+            const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
+            appHook.insertBefore(shoppingCartElement.renderCart(), appHook.childNodes[0]);
+
+        } else {
             alert("Please add an item to the cart!");
         }
     }
-    static addGuitar(){
+    static addGuitar(store) {
         
         const form = document.getElementById("add-guitar-form");
         const type = document.getElementById("guitarType");
@@ -257,9 +260,19 @@ class App {
         const name = document.getElementById("guitarName");
         const price = document.getElementById("guitarPrice");
         const image = document.getElementById("guitarImage");
-        const guitar = new Guitar(type.value, color.value, name.value,price.value,"images/" +image.files[0].name);
+        if(typeof image.files[0] === 'undefined'){
+            alert("Please enter an image");
+            return;
+        }else{
+            const guitar = new Guitar(type.value, color.value, name.value, price.value, "images/" + image.files[0].name);
+
+        }
+        
+        console.log(this.guitarList.guitars);
+        
         form.reset();
         
+
 
     }
 
@@ -267,5 +280,4 @@ class App {
 
 App.init();
 const addGuitar = document.getElementById("addGuitar-btn");
-addGuitar.addEventListener("click",App.addGuitar);
-
+addGuitar.addEventListener("click", App.addGuitar);
