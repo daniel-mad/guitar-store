@@ -80,13 +80,18 @@ class GuitarList {
 
     // Class Methods
     sellGuitar(guitar) {
-        return this.guitars.pop(guitar);
+        const index = this.guitars.indexOf(guitar);
+        this.guitars.splice(index, 1);
     }
+
+
+
 
     addGuitar(guitar) {
         return this.guitars.push(guitar);
 
     }
+
 
 
 
@@ -98,9 +103,10 @@ class GuitarListElement {
         this.guitarList = guitarList;
     }
 
-    addGuitar(){
+    addGuitar() {
         App.addGuitar(this.guitarList);
     }
+
     renderGuitarList() {
         const storeElement = document.createElement("div");
         storeElement.className = "row cards-container d-flex align-items-stretch"
@@ -111,6 +117,8 @@ class GuitarListElement {
         }
         const addGuitar = document.getElementById("addGuitar-btn");
         addGuitar.addEventListener("click", this.addGuitar.bind(this));
+
+
 
         return storeElement;
     }
@@ -138,7 +146,7 @@ class ShoppingCart {
 class ShoppingCartElement {
     constructor(shoppingCart, guitarList) {
         this.shoppingCart = shoppingCart;
-        this.guitarList = guitarList;
+        this.guitarList2 = guitarList;
     }
     sellGuitars() {
         App.sellGuitars(this.shoppingCart);
@@ -149,7 +157,7 @@ class ShoppingCartElement {
         const cartTable = document.createElement("table");
         cartTable.className = "table table-hover";
         cartTable.innerHTML += `
-        <caption>Total items in the store: ${this.guitarList.guitars.length}</caption>
+        <caption>Total items in the store: ${this.guitarList2.guitars.length}</caption>
         <thead>
             <tr>
              <th scope="col">#</th>
@@ -213,15 +221,15 @@ class GuitarShop {
 //App Class
 
 class App {
-    
+
 
     static init() {
         const shop = new GuitarShop();
         shop.renderShop();
         this.shoppingCart = shop.shoppingCart;
         this.guitarList = shop.guitarList;
-        
-        
+
+
     }
 
     static addGuitar(guitarList) {
@@ -232,24 +240,21 @@ class App {
         const name = document.getElementById("guitarName");
         const price = document.getElementById("guitarPrice");
         const image = document.getElementById("guitarImage");
-        if(typeof image.files[0] === 'undefined'){
+        if (typeof image.files[0] === 'undefined') {
             alert("Please enter an image");
-            return;
-        }else{
+        } else {
             const guitar = new Guitar(type.value, color.value, name.value, price.value, "images/" + `${type.value}/` + image.files[0].name);
             guitarList.guitars.push(guitar);
-            const guitarsElement = new GuitarListElement(guitarList);
+            const guitarsElement = new GuitarListElement(this.guitarList);
             const row = document.querySelector(".row");
-            console.log(row);
-            console.log(guitarsElement);
             row.remove();
             appHook.append(guitarsElement.renderGuitarList());
-            
+
 
         }
-        
+
         form.reset();
-        
+
 
 
     }
@@ -257,6 +262,7 @@ class App {
 
     static addGuitarToCart(guitar) {
         if (document.querySelector("table") != null) {
+
             this.shoppingCart.addGuitarToTheCart(guitar);
             const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
             const table = document.querySelector("table");
@@ -264,6 +270,7 @@ class App {
             appHook.insertBefore(shoppingCartElement.renderCart(), appHook.childNodes[0]);
         } else {
             this.shoppingCart.addGuitarToTheCart(guitar);
+
             const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
             appHook.insertBefore(shoppingCartElement.renderCart(), appHook.childNodes[0]);
 
@@ -276,6 +283,7 @@ class App {
             this.shoppingCart.cart = [];
             const table = document.querySelector("table");
             table.remove();
+
             const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
             appHook.insertBefore(shoppingCartElement.renderCart(), appHook.childNodes[0]);
             const guitarsElement = new GuitarListElement(this.guitarList);
@@ -286,7 +294,7 @@ class App {
             for (const guitar of shoppingCart.cart) {
                 this.guitarList.sellGuitar(guitar);
             }
-            console.log(this.guitarList.guitars);
+
             this.shoppingCart.cart = [];
             alert("Thank you for shopping in this store, Yours guitar will be arrived soon :)");
             const table = document.querySelector("table");
@@ -300,9 +308,10 @@ class App {
 
         } else {
             alert("Please add an item to the cart!");
+
         }
     }
-    
+
 
 }
 
