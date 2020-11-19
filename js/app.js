@@ -32,7 +32,7 @@ class GuitarElement {
         guitarCard.innerHTML = `
         <div class="card" id="${this.guitar.id}">
         <div class="img-wrapper mb-5">
-        <img class="card-img-top img-fluid" src="${this.guitar.image}" alt="${this.guitar.description}">
+        <img class="card-img-top" src="${this.guitar.image}" alt="${this.guitar.description}">
       </div>
         <div class="card-body">
           <h6 class="card-title text-center">${this.guitar.description}</h6>
