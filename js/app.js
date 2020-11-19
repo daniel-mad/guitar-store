@@ -97,6 +97,10 @@ class GuitarListElement {
     constructor(guitarList) {
         this.guitarList = guitarList;
     }
+
+    addGuitar(){
+        App.addGuitar(this.guitarList);
+    }
     renderGuitarList() {
         const storeElement = document.createElement("div");
         storeElement.className = "row cards-container d-flex align-items-stretch"
@@ -105,6 +109,8 @@ class GuitarListElement {
             const element = new GuitarElement(guitar);
             storeElement.append(element.renderGuitarElement());
         }
+        const addGuitar = document.getElementById("addGuitar-btn");
+        addGuitar.addEventListener("click", this.addGuitar.bind(this));
 
         return storeElement;
     }
@@ -207,14 +213,45 @@ class GuitarShop {
 //App Class
 
 class App {
+    
 
-   
     static init() {
         const shop = new GuitarShop();
         shop.renderShop();
         this.shoppingCart = shop.shoppingCart;
         this.guitarList = shop.guitarList;
-        return this.guitarList;
+        
+        
+    }
+
+    static addGuitar(guitarList) {
+        const appHook = document.getElementById('app');
+        const form = document.getElementById("add-guitar-form");
+        const type = document.getElementById("guitarType");
+        const color = document.getElementById("guitarColor");
+        const name = document.getElementById("guitarName");
+        const price = document.getElementById("guitarPrice");
+        const image = document.getElementById("guitarImage");
+        if(typeof image.files[0] === 'undefined'){
+            alert("Please enter an image");
+            return;
+        }else{
+            const guitar = new Guitar(type.value, color.value, name.value, price.value, "images/" + `${type.value}/` + image.files[0].name);
+            guitarList.guitars.push(guitar);
+            const guitarsElement = new GuitarListElement(guitarList);
+            const row = document.querySelector(".row");
+            console.log(row);
+            console.log(guitarsElement);
+            row.remove();
+            appHook.append(guitarsElement.renderGuitarList());
+            
+
+        }
+        
+        form.reset();
+        
+
+
     }
 
 
@@ -235,7 +272,16 @@ class App {
     }
     static sellGuitars(shoppingCart) {
         if (this.guitarList.guitars.length - shoppingCart.cart.length < 5) {
-            alert("Cannot sell, store out of stock!")
+            alert("Cannot sell, store out of stock!");
+            this.shoppingCart.cart = [];
+            const table = document.querySelector("table");
+            table.remove();
+            const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
+            appHook.insertBefore(shoppingCartElement.renderCart(), appHook.childNodes[0]);
+            const guitarsElement = new GuitarListElement(this.guitarList);
+            const row = document.querySelector(".row");
+            row.remove();
+            appHook.append(guitarsElement.renderGuitarList());
         } else if (shoppingCart.cart.length > 0) {
             for (const guitar of shoppingCart.cart) {
                 this.guitarList.sellGuitar(guitar);
@@ -247,37 +293,17 @@ class App {
             table.remove();
             const shoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
             appHook.insertBefore(shoppingCartElement.renderCart(), appHook.childNodes[0]);
+            const guitarsElement = new GuitarListElement(this.guitarList);
+            const row = document.querySelector(".row");
+            row.remove();
+            appHook.append(guitarsElement.renderGuitarList());
 
         } else {
             alert("Please add an item to the cart!");
         }
     }
-    static addGuitar(store) {
-        
-        const form = document.getElementById("add-guitar-form");
-        const type = document.getElementById("guitarType");
-        const color = document.getElementById("guitarColor");
-        const name = document.getElementById("guitarName");
-        const price = document.getElementById("guitarPrice");
-        const image = document.getElementById("guitarImage");
-        if(typeof image.files[0] === 'undefined'){
-            alert("Please enter an image");
-            return;
-        }else{
-            const guitar = new Guitar(type.value, color.value, name.value, price.value, "images/" + image.files[0].name);
-
-        }
-        
-        console.log(this.guitarList.guitars);
-        
-        form.reset();
-        
-
-
-    }
+    
 
 }
 
 App.init();
-const addGuitar = document.getElementById("addGuitar-btn");
-addGuitar.addEventListener("click", App.addGuitar);
