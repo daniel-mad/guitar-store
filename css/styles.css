@@ -54,6 +54,32 @@ section{
 .form-control-file{
 width: auto !important;
 }
+/* Search bar */
+#search{
+    display: flex;
+    align-items: center;
+    background-color: #343a40;
+    color: #fff;
+    justify-content: space-around;
+}
+.search-group{
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+.control-search{
+    max-height: 35px;
+    
+
+}
+.search-text{
+    font-size: 1.2rem ;
+}
+#btn-search{
+    font-size: 0.8rem ;
+    
+}
 /* Cards */
 
 

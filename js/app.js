@@ -239,16 +239,25 @@ class App {
         const color = document.getElementById("guitarColor");
         const name = document.getElementById("guitarName");
         const price = document.getElementById("guitarPrice");
-        const image = document.getElementById("guitarImage");
+        const image = document.getElementById("guitarImage");     
         if (typeof image.files[0] === 'undefined') {
             alert("Please enter an image");
+            
         } else {
             const guitar = new Guitar(type.value, color.value, name.value, price.value, "images/" + `${type.value}/` + image.files[0].name);
             guitarList.guitars.push(guitar);
             const guitarsElement = new GuitarListElement(this.guitarList);
-            const row = document.querySelector(".row");
+            // const row = document.querySelector(".row");
+            // row.remove();
+            // appHook.append(guitarsElement.renderGuitarList());
+            const table = document.querySelector("table")
+            const row = document.querySelector(".row")
+            table.remove();
             row.remove();
+            const ShoppingCartElement = new ShoppingCartElement(this.shoppingCart, this.guitarList);
+            appHook.append(ShoppingCartElement.renderCart());
             appHook.append(guitarsElement.renderGuitarList());
+            
 
 
         }
